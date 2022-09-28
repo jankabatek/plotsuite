@@ -1,31 +1,30 @@
-v 1.2
-d {bf:PLOTTABS}: A collection of Stata graphing commands for lage datasets
+d 'PLOTTABS': module providing fast graphing commands for large datasets
 d
+d  The plottabs suite is a set of graphing commands for large
+d datasets, producing highly customizable plots in a fraction of
+d time required by Stata's native graphing commands.  
 d
-d See the help file (help plottabs) for details after installation.
+d KW: graphics
+d KW: plots
 d
-d Requires: Stata version 16 or higher. 
+d Requires: Stata version 16
 d
-d KW: Stata
-d KW: graphs
+d Distribution-Date: 20220927
 d
-d Distribution-Date: 20220928
-d License: MIT
+d Author: Jan Kabátek, University of Melbourne
+d Support: email j.kabatek@@unimelb.edu.au
 d
-d Author: Jan Kabatek
-d E-mail: j.kabatek@unimelb.edu.au
-d
-f plotbetas.ado
-f plotbetas.sthlp
-f plotb.ado
 f plottabs.ado
 f plottabs.sthlp
-f plott.ado
-f plotshares.ado
-f plotshares.sthlp
-f plots.ado
-f plotmeans.ado
-f plotmeans.sthlp
-f plotm.ado
+f plotb.ado
+f plotbetas.ado
 f plotinit.ado
+f plotm.ado
+f plotmeans.ado
+f plots.ado
+f plotshares.ado
+f plott.ado
 f plottwoway.ado
+f plotbetas.sthlp
+f plotmeans.sthlp
+f plotshares.sthlp
