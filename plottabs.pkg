@@ -1,0 +1,31 @@
+v 1.2
+d {bf:PLOTTABS}: A collection of Stata graphing commands for lage datasets
+d
+d
+d See the help file (help plottabs) for details after installation.
+d
+d Requires: Stata version 16 or higher. 
+d
+d KW: Stata
+d KW: graphs
+d
+d Distribution-Date: 20220928
+d License: MIT
+d
+d Author: Jan Kabatek
+d E-mail: j.kabatek@unimelb.edu.au
+d
+f plotbetas.ado
+f plotbetas.sthlp
+f plotb.ado
+f plottabs.ado
+f plottabs.sthlp
+f plott.ado
+f plotshares.ado
+f plotshares.sthlp
+f plots.ado
+f plotmeans.ado
+f plotmeans.sthlp
+f plotm.ado
+f plotinit.ado
+f plottwoway.ado
