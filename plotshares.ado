@@ -6,7 +6,7 @@ program define plotshares
 	** Plotshares-specific options defined here
 	local pt_opts 		clear 				COMmand     		///
 		FRame(string) 	GLobal 				GRaph(name)  		///
-		INVert 		    OUTput(string)		PLOTonly 			///
+		INVert 		    OUTput(string)		NOStack 	PLOTonly 			///
 		PLName(string)	REPlace(integer -1) TIMes(real 1) 		///
 		YZero
 	
@@ -45,8 +45,9 @@ program define plotshares
 	if "`over'"    != "" & "`plotonly'" ==""   confirm var `varlist' 
 	
 	** define the default graph type to be plotted 
-	if "`graph'" == "" local graph  area
 	if "`output'"== "" local output share
+	if "`graph'" == "" local nogrop = 1
+	if "`graph'" == "" local graph area
 	if "`frame'" == "" local frame  frame_pt 
 
 	** inverted categorical order?
@@ -74,17 +75,31 @@ program define plotshares
 
 			** PS: adjust the matcell data to conform with the chosen output type 
 			local out = substr("`output'",1,3)  
-			if "`out'"=="sta" {
-				mata: SHARES(0,`inv_sw')
-				local output Stacked frequencies 
+			if "`out'"=="fre" {
+				if "`nostack'"=="" {
+					mata: SHARES(0,`inv_sw',0)
+					local output Stacked frequencies 
+				}
+				else{
+					mata: SHARES(0,0,1)
+					local output Relative Shares
+					if `nogrop'==1 local graph line					
+				}
 			}
 			else { 
-				if "`out'"!="sta" & "`out'"!="sha" {
+				if "`out'"!="sha" {
 					n di as err "Unknown output type specified, reverting to relative shares"
 				}
 				*local inv_sw = 1 - `inv_sw' //COULD BE COLLAPSED BELOW
-				mata: SHARES(1,`inv_sw')
-				local output Relative Shares 
+				if "`nostack'"=="" {
+					mata: SHARES(1,`inv_sw',0)
+					local output Stacked shares 
+				}
+				else{
+					mat MATVAL = cell_val
+					local output Frequencies 
+					if `nogrop'==1 local graph line				
+				}
 			} 
 			
 			** PS: multiply the cell values by a constant ?
@@ -168,34 +183,40 @@ end
 
 cap mata: mata drop SHARES()
 mata
-function SHARES(share,inv)
+function SHARES(share,inv,ns)
 	{
 		MATVAL_ORIG = st_matrix("cell_val")
 		MATVAL 		= MATVAL_ORIG
 		 
 		/* inverse selection : first category comes on the top of the graph */
-		
-		if (inv ==1) {
-			for (j=1; j<=cols(MATVAL); j++) {
-				jinv = cols(MATVAL) - (j-1)
-				MATVAL[,j] = MATVAL_ORIG[,jinv]
-			} 
-		}
-		
-		/* relative shares */
-		if (share ==1) {
-			SUMVAL = rowsum(MATVAL)
-			for (j=1; j<=cols(MATVAL); j++) {
+		if (ns ==0) {
+			if (inv ==1) {
+				for (j=1; j<=cols(MATVAL); j++) {
+					jinv = cols(MATVAL) - (j-1)
+					MATVAL[,j] = MATVAL_ORIG[,jinv]
+				} 
+			}
+			
+			/* relative shares */
+			if (share ==1) {
+				SUMVAL = rowsum(MATVAL)
+				for (j=1; j<=cols(MATVAL); j++) {
+					for (i=1; i<=rows(MATVAL); i++) {
+						MATVAL[i,j] = MATVAL[i,j] / SUMVAL[i,1]
+					}
+				}
+			}
+			
+			for (j=cols(MATVAL)-1; j>=1; j--) {
 				for (i=1; i<=rows(MATVAL); i++) {
-					MATVAL[i,j] = MATVAL[i,j] / SUMVAL[i,1]
+					MATVAL[i,j] = MATVAL[i,j] + MATVAL[i,(j+1)] 
 				}
 			}
 		}
-		
-		for (j=cols(MATVAL)-1; j>=1; j--) {
+		else {
 			for (i=1; i<=rows(MATVAL); i++) {
-				MATVAL[i,j] = MATVAL[i,j] + MATVAL[i,(j+1)] 
-			}
+				MATVAL[i,] = MATVAL_ORIG[i,] / rowsum(MATVAL_ORIG[i,])
+			}			
 		}
 		st_matrix("MATVAL",MATVAL)
 	}
