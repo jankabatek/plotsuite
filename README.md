@@ -12,7 +12,7 @@ you can install the **plot suite** from SSC:
 
 or from GitHub:
 
-    net install plottabs, from("https://raw.githubusercontent.com/jankabatek/plotsuite/master/") replace
+    net install plottabs, from("https://raw.githubusercontent.com/jankabatek/plotsuite/master/ado/") replace
 
 Note: **plot suite needs Stata 16 or higher**.
 
