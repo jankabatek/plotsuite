@@ -35,7 +35,7 @@ In contrast to the alpha-version released as a part of the deprecated [statapack
 This example is equivalent to combining two histograms with discrete bin widths and option *freq*. 
 However, the plot command is **10 times faster** than the native command.
  
-![2 histograms](figures/2histograms.png) 
+![2 histograms](figures/2histograms.png)
 
 Code:
 
