@@ -18,7 +18,7 @@ Note: **plot suite needs Stata 16 or higher**.
 
 # Description
 
-The **plot suite** of graphing commands is particularly useful for visual analyses of admin data, enabling users to produce a variety of highly customizable plots **in a fraction of time required by Stata's native graphing commands**. Benchmarks at the bottom of this readme show that plottabs prove more than 100-times faster than the native command, with the efficiency gains growing with sample size.     
+The **plot suite** of graphing commands is particularly useful for visual analyses of admin data, enabling users to produce a variety of highly customizable plots **in a fraction of time required by Stata's native graphing commands**. Benchmarks at the bottom of this readme show that plottabs prove more than 300-times faster than the native command, with the efficiency gains growing with sample size.     
 
 1. **plottabs** plots conditional shares/frequencies of observations (a visual analogue of 'tabulate oneway')
 2. **plotshares** plots conditional categorical shares/frequencies (a visual analogue of 'tabulate twoway')
@@ -33,7 +33,6 @@ In contrast to the alpha-version released as a part of the deprecated [statapack
 ## Example 1: Conditional frequencies with plottabs
 
 This example is equivalent to combining two histograms with discrete bin widths and option *freq*. 
-However, the plot command is **10 times faster** than the native command.
  
 ![2 histograms](figures/2histograms.png)
 
@@ -46,7 +45,7 @@ Code:
     // first histogram (gr=1), option clear erases previous plot data from the memory
     plottabs if gr==1, over(x1) graph(bar) clear color("0 91 187%50")
     // second histogram (gr=2), overall twoway options & graph-specific options
-    plottabs if gr==2, over(x1) graph(bar) title("Frequencies of observations, conditional on x") xtitle("x") ytitle("Frequency") legend(on order(1 "Group 1" 2 "Group 2")) xsize(7) color("255 213 0%70") lcolor("187 151 4") scheme(gg_tableau)
+    plottabs if gr==2, over(x1) graph(bar) title("Frequencies of observations, conditional on x") xtitle("x") legend(on order(1 "Group 1" 2 "Group 2")) xsize(7) color("255 213 0%70") lcolor("187 151 4") scheme(gg_tableau)
 
 
 ## Example 2: Conditional means with plotmeans
@@ -117,7 +116,7 @@ I ran a few benchmark tests in which I pitted the plottabs command against its n
 
     . // plottabs command
     . tic
-    . plottabs if gr==1, over(x1) clear nogen
+    . plottabs if gr==1, over(x1) clear nodraw
     1 - tabulating values for a new graph
       - plot type: line
     . plottabs if gr==2, over(x1) graph(bar) 
