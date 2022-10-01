@@ -30,10 +30,10 @@ Apart from speed gains, the key advantage of the **plot suite** is that it allow
 In contrast to the alpha-version released as a part of the deprecated [statapack repository](https://github.com/jankabatek/statapack), the overhauled commands make nicer graphs, are easier to customize (you can specify the preferred graph type and use all of the standard twoway graphing options), and the plotted data are easier to manage (for details, see the help files in Stata).
 
 # Examples
-## Example 1: Conditional frequencies with PLOTTABS
+## Example 1: Conditional frequencies with plottabs
 
 This example is equivalent to combining two histograms with discrete bin widths and option *freq*. 
-However, the plot command is **10 times faster** than the native command. 
+However, the plot command is **10 times faster** than the native command.
  
 ![2 histograms](figures/2histograms.png) 
 
@@ -49,7 +49,7 @@ Code:
     plottabs if gr==2, over(x1) graph(bar) title("Frequencies of observations, conditional on x") xtitle("x") ytitle("Frequency") legend(on order(1 "Group 1" 2 "Group 2")) xsize(7) color("255 213 0%70") lcolor("187 151 4") scheme(gg_tableau)
 
 
-## Example 2: Conditional means with PLOTMEANS
+## Example 2: Conditional means with plotmeans
 
 This example plots conditional means of variable *y* (*x* is the conditioning variable) for ten groups of observations.
  
@@ -63,11 +63,11 @@ Code:
     plotmeans y if gr10 ==1, over(x2) clear 
     // conditional means for the other groups, specify the twoway options & graph options
     forvalues g = 2/10{
-        plotmeans y if gr10 ==`g', over(x2) legend(off) ytitle(y) xtitle(x) title("Means of outcome y for `g' groups," "conditional on x") xsize(6)
+        plotmeans y if gr10 ==`g', over(x2) legend(off) ytitle(y) xtitle(x) title("Sample means of y for `g' subgroups," "conditional on x") xsize(6) scheme(black_hue)
     }
 
 
-## Example 3: Stacked conditional shares with PLOTAREA
+## Example 3: Stacked conditional shares with plotshares
 
 This example plots how many observations belong to each of four mutually exclusive groups of observations, conditional on a specific value of *x*
  
@@ -79,7 +79,7 @@ Code:
     webuse plotdata, clear
     plotshares gr4, over(x3) title("Shares of observations belonging to groups 1-4," "conditional on x") xtitle("x") legend(on rows(4) pos(3) order(1 "Group 1" 2 "Group 2" 3 "Group 3" 4 "Group 4")) xsize(7) scheme(rainbow)
 
-## Example 4: Multiple sets of coefficient estimates with PLOTB
+## Example 4: Multiple sets of coefficient estimates with plotbetas
 
 This example plots coefficient estimates and 95% confidence intervals corresponding to a factorized regressor *x* from three separate regressions. 
  
