@@ -28,7 +28,7 @@ program define plotshares
 		XSIZe(passthru)  YSIZe(passthru)						///
 		BY(string asis)  SAVing(string asis) GRAPHREGION(string)					
 		
-	syntax [varname(default=none max=1)] [if] [in], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
+	syntax [varname(default=none max=1)] [if] [in] [fw aw iw], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
  	
 	** extract all twoway graphing options that are shared by all graph types 
 	*  and store them in `tw_op' (declared by _parse)
@@ -53,7 +53,10 @@ program define plotshares
 	** inverted categorical order?
 	if "`invert'" != "invert" local inv_sw = 0
 	if "`invert'" == "invert" local inv_sw = 1  
- 							 
+	
+	** weights
+	local weight "[`weight'`exp']"
+ 							  							 
 	qui {
 		** (1) FRAME INITIALIZATION (SAME FOR ALL PLOT COMMANDS) ***************
 		
@@ -70,7 +73,7 @@ program define plotshares
 			n di as result `i' " - tabulating values for a new graph" 
 			
 			** PS: tabulate command
-			tab `over' `varlist' `if', matcell(cell_val) matrow(x_val) matcol(gr_val)  
+			tab `over' `varlist' `if' `in' `weight', matcell(cell_val) matrow(x_val) matcol(gr_val)  
 			local ncol = r(c)
 
 			** PS: adjust the matcell data to conform with the chosen output type 

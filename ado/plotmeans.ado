@@ -29,7 +29,7 @@ program define plotmeans
 		XSIZe(passthru)  YSIZe(passthru)						///
 		BY(string asis)  SAVing(string asis) GRAPHREGION(string)					
 		
-	syntax [varname(default=none max=1)] [if] [in], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
+	syntax [varname(default=none max=1)] [if] [in] [fw aw iw], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
  	
 	** extract all twoway graphing options that are shared by all graph types 
 	*  and store them in `tw_op' (declared by _parse)
@@ -61,7 +61,10 @@ program define plotmeans
 	if "`graph'" == "" local graph = "line"
 	if "`rgraph'"== "" local rgraph = "rarea"
 	if "`frame'" == "" local frame frame_pt
-						 
+	
+	** weights
+	local weight "[`weight'`exp']"
+ 							 						 
 	qui {
 		** (1) FRAME INITIALIZATION (SAME FOR ALL PLOT COMMANDS) ***************
 		
@@ -122,7 +125,7 @@ program define plotmeans
 				}
 				
 			** get the plotted means (by OLS with factorzized `over' variable `factor_ov')  
-			reg `varlist' ibn.``factor_ov'' `if' `in', nocons 
+			reg `varlist' ibn.``factor_ov'' `if' `in' `weight' , nocons 
 						
 			mat RES = r(table)
 			mat plot_val`i' = RES[1,1...]' 

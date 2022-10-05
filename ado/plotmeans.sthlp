@@ -20,6 +20,7 @@
 
 {p 8 17 2}
 {cmdab:plotm:eans} {it:{help varname}} {ifin}
+[{it:{help plotmeans##weight:weight}}]
 , over({it:{help groupvar}}) [options]
 
 {p 8 17 2}where {it:{help varname}} is the outcome and {it:{help groupvar}} is the conditioning variable 
@@ -57,7 +58,11 @@ INCLUDE help gr_baropt
 {p2line}
 {p2colreset}{...}
 {p 4 6 2}
-{it:{help varname}} and over({it:{help groupvar}}) need to be specified to produce a new plot. They do not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only}).
+{it:{help varname}} and over({it:{help groupvar}}) need to be specified to produce a new plot. They do not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only}).{p_end}
+{marker weight}{...}
+{p 4 6 2}
+{opt aweight}s, {opt fweight}s, {opt iweight}s, and {opt pweight}s, are allowed;
+see {help weight}.
 
 
 {marker description}{...}

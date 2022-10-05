@@ -21,6 +21,7 @@
 
 {p 8 17 2}
 {cmdab:plott:abs} {it:{help varname}} {ifin}
+[{it:{help plottabs##weight:weight}}]
 [, options]
 
 {p 8 17 2}where {it:{help varname}} is the conditioning variable. 
@@ -56,7 +57,11 @@ INCLUDE help gr_baropt
 {p2line}
 {p2colreset}{...}
 {p 4 6 2}
-{it:{help varname}} needs to be specified (one way or the other) to produce a new plot. It does not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only}).
+{it:{help varname}} needs to be specified (one way or the other) to produce a new plot. It does not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only})..{p_end}
+{marker weight}{...}
+{p 4 6 2}
+{opt fweight}s, {opt aweight}s, and {opt iweight}s are allowed;
+see {help weight}.
 
 
 {marker description}{...}

@@ -20,6 +20,7 @@
 
 {p 8 17 2}
 {cmdab:plots:hares} {it:{help varname}} {ifin}
+[{it:{help plotshares##weight:weight}}]
 , over({it:{help groupvar}}) [options]
 
 {p 8 8 2}where {it:{help varname}} is the (categorical) outcome variable and {it:{help groupvar}} is the conditioning variable 
@@ -55,7 +56,11 @@ INCLUDE help gr_baropt
 {p2line}
 {p2colreset}{...}
 {p 4 6 2}
-{it:{help varname}} and over({it:{help groupvar}}) need to be specified to produce a new plot. They do not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only}).
+{it:{help varname}} and over({it:{help groupvar}}) need to be specified to produce a new plot. They do not need to be specified when displaying plots that are already stored in the memory (using the option {cmdab:plot:only}).{p_end}
+{marker weight}{...}
+{p 4 6 2}
+{opt fweight}s, {opt aweight}s, and {opt iweight}s are allowed;
+see {help weight}.
 
 
 {marker description}{...}
