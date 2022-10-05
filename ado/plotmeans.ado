@@ -29,7 +29,7 @@ program define plotmeans
 		XSIZe(passthru)  YSIZe(passthru)						///
 		BY(string asis)  SAVing(string asis) GRAPHREGION(string)					
 		
-	syntax [varname(default=none max=1)] [if] [in] [fw aw iw], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
+	syntax [varname(default=none max=1)] [if] [in] [fw aw iw pw], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
  	
 	** extract all twoway graphing options that are shared by all graph types 
 	*  and store them in `tw_op' (declared by _parse)
