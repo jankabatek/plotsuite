@@ -1,6 +1,6 @@
 # Plot suite: make pretty graphs, pretty fast
 
-this repository houses the most recent version of the **plot suite** of fast graphing commands for large datasets in Stata.  
+this repo houses the most recent version of the **plot suite** of fast graphing commands for large datasets in Stata.  
 
 ![Conditional means](figures/comb.png) 
 
