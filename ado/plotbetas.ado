@@ -1,33 +1,33 @@
-*! version 1.2 27Sep2022 
+*! version 1.3 20Apr2023 
 capture program drop plotbetas 
 program define plotbetas
 	version 16
 	
 	** Plotbetas-specific options defined here
-	local pt_opts 		CIopt(string)       clear 				///
-		COMmand     	FRame(string) 		GLobal 				///
-		GRaph(name)  	NODIAG 				OUTput(string) 		///
-		PLOTonly   		PLName(string) 							///
-		RGRaph(name) 	REPlace(integer -1) TIMes(real 1)  		///
+	local pt_opts 		CIopt(string)       clear                       ///
+		COMmand     	FRame(string) 	    GLobal                      ///
+		GRaph(name)  	NODIAG 		    OUTput(string)              ///
+		PLOTonly   	PLName(string)                                  ///
+		RGRaph(name) 	REPlace(integer -1) TIMes(real 1)               ///
 		XSHift(real 0)  YSHift(real 0)      YZero
 	
 	** All native twoway options specified here...
-	local tw_opts 		 noDRAW 			NAME(string) 		///
-		SCHeme(passthru) COPYSCHeme 		noREFSCHeme 		/// 
-		FXSIZe(passthru) FYSIZe(passthru)	PLAY(string asis)	/// 
-		TItle(string)    SUBtitle(string) 	CAPtion(string)		///
-		NOTE(string)     LEGend(string)							///
-		T1title(string)  T2title(string) 	B1title(string)		///
-		B2title(string)  L1title(string) 	L2title(string)		///
-		R1title(string)  R2title(string)						///
-		XLabels(string)  YLabels(string)  	TLabels(string)		///
-		XTICks(string)   YTICks(string)   	TTICks(string)		///
-		XMLabels(string) YMLabels(string) 	TMLabels(string)	///
-		XMTicks(string)  YMTicks(string)  	TMTicks(string)		/// 
-		XTitle(string)   YTitle(string)   	TTitle(string)		///
-		XOptions(string) YOptions(string)						///
-		XSIZe(passthru)  YSIZe(passthru)						///
-		BY(string asis)  SAVing(string asis) GRAPHREGION(string)					
+	local tw_opts 		 noDRAW                 NAME(string) 		///
+		SCHeme(passthru) COPYSCHeme             noREFSCHeme 		/// 
+		FXSIZe(passthru) FYSIZe(passthru)       PLAY(string asis)	/// 
+		TItle(string)    SUBtitle(string)       CAPtion(string)		///
+		NOTE(string)     LEGend(string)	                                ///
+		T1title(string)  T2title(string)        B1title(string)	        ///
+		B2title(string)  L1title(string)        L2title(string)	        ///
+		R1title(string)  R2title(string)                                ///
+		XLabels(string)  YLabels(string)        TLabels(string)	        ///
+		XTICks(string)   YTICks(string)         TTICks(string)	        ///
+		XMLabels(string) YMLabels(string)       TMLabels(string)        ///
+		XMTicks(string)  YMTicks(string)        TMTicks(string)	        /// 
+		XTitle(string)   YTitle(string)         TTitle(string)	        ///
+		XOptions(string) YOptions(string)                               ///
+		XSIZe(passthru)  YSIZe(passthru)                                ///
+		BY(string asis)  SAVing(string asis)    GRAPHREGION(string)					
 				 		
 	syntax [varlist(fv)] [if] [in], [ `pt_opts' `tw_opts' * ] 		
  	
@@ -129,7 +129,7 @@ program define plotbetas
 					if "`noci'" =="" {
 						** get degrees of freedom & inverse t-stat for confidence level `ci'
 						local df = e(df_r)
-						local invt = invt(`df',0.`ci')
+						local invt = invt(`df',(`ci'+(100-`ci')/2)/100)
 						** derive the CI for the given coefficient
 						local LC = _b[`var'] - `invt'*_se[`var']
 						local UC = _b[`var'] + `invt'*_se[`var']
