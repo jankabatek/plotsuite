@@ -1,6 +1,6 @@
 *! version 1.3 20Apr2023 
 capture program drop plotbetas 
-program define plotbetas
+program define plotbetas, rclass
 	version 16
 	
 	** Plotbetas-specific options defined here
@@ -30,13 +30,17 @@ program define plotbetas
 		BY(string asis)  SAVing(string asis)    GRAPHREGION(string)					
 				 		
 	syntax [varlist(fv)] [if] [in], [ `pt_opts' `tw_opts' * ] 		
+  
+	** retain estimation data stored in r() - this is for calculation of CIs, 
+	*  should precede any other commands!
+	local pt_rlev = r(level)
+	mat   pt_rtab = r(table) 
  	
 	** extract all twoway graphing options that are shared by all graph types 
 	*  and store them in `tw_op' (declared by _parse)
-	local 0 pt_aux_var `0' 	 				   
-	 
+	local 0 pt_aux_var `0'  
 	_parse expand cmd tw : 0 , common(`tw_opts')  
-  
+   
 	** extract all the remaining (*) options (not included in pt_opts + my_opts + graph_opts) and 
 	*  assume that these are all graph-specific options (e.g., lpattern, msymbol, etc.)
 	*  TBD: _rc check whether these are actually graph-specific  options
@@ -54,11 +58,14 @@ program define plotbetas
 		}		
 		else local factor = 0
 	} 
-	
+	 
 	** extract all CI options from the composite `ciopt' string: 
 	tokenize "`ciopt'", parse(",")
-	cap confirm number `1'
-	if _rc != 0  & "`1'"!="off" local ciopt 95 `ciopt'
+	cap confirm number `1' 
+	if _rc != 0  & "`1'"!="off" { 
+		if `pt_rlev' != . local ciopt `pt_rlev' `ciopt'
+		else              local ciopt 95 `ciopt' 	
+	}	
 	_parse expand cmd off : ciopt , common(off)
 	if "`off_op'" == "off" | "`1'" == "off" local noci noci
 	else{
@@ -66,7 +73,8 @@ program define plotbetas
 		local ci = `1'
 		local ci_op `3' 
 	}
-
+	 
+	
 	** define defaults: 
 	if "`graph'" == "" local graph = "line"
 	if "`rgraph'"== "" local rgraph = "rarea"
@@ -86,18 +94,6 @@ program define plotbetas
 		
 		if "`plotonly'" == ""  {	 	
 			if "`nodiag'"=="" n di as result `i' " - calculating values for a new plot" 
- 		
-			** PB: min max and number of columns
-			if "`constraint'" =="" { 
-				qui sum `varlist'
-				local min = r(min)
-				local max = r(max)
-			}
-			else {
-				tokenize "`constraint'"
-				local min = `1'
-				local max = `2'
-			}
 			
 			local cols = 4
 			if "`noci'" !="" local cols  = 2 
@@ -127,16 +123,34 @@ program define plotbetas
 				cap qui di _b[`var']
 				if _rc ==0 { 
 					if "`noci'" =="" {
-						** get degrees of freedom & inverse t-stat for confidence level `ci'
-						local df = e(df_r)
-						local invt = invt(`df',(`ci'+(100-`ci')/2)/100)
-						** derive the CI for the given coefficient
-						local LC = _b[`var'] - `invt'*_se[`var']
-						local UC = _b[`var'] + `invt'*_se[`var']
-						mat PL = [PL \ `ii' , _b[`var'], `LC', `UC' ]
+						** if CI level is unspecified, retrieve the CIs from the regression output
+						if `pt_rlev' == `ci' {
+							n di "default CI level" 
+							local LC = el(pt_rtab, rownumb(pt_rtab,"ll"),  colnumb(pt_rtab,"`var'"))
+							local UC = el(pt_rtab, rownumb(pt_rtab,"ul"),  colnumb(pt_rtab,"`var'"))
+							local BE = el(pt_rtab, rownumb(pt_rtab,"b"),  colnumb(pt_rtab,"`var'"))
+							mat PL = [PL \ `ii' , `BE', `LC', `UC' ]	
+						}
+						else if e(cmd)=="regress"{
+							** get degrees of freedom & inverse t-stat for confidence level `ci'					
+							local df = e(N)-e(rank)
+							*if `df' ==. 
+							local invt = invt(`df',(`ci'+(100-`ci')/2)/100)
+							n di as err `invt'
+							** derive the CI for the given coefficient
+							local LC = _b[`var'] - `invt'*_se[`var']
+							local UC = _b[`var'] + `invt'*_se[`var']
+							mat PL = [PL \ `ii' , _b[`var'], `LC', `UC' ]
+						}
+						else {
+							local caution 1
+							mat PL = [PL \ `ii' , _b[`var'], ., . ]
+							local noci noci
+						}
+						
 					}
 					else { 
-						mat PL = [PL \ `ii' , _b[`var']]
+						mat PL = [PL \ `ii' , el(pt_rtab, rownumb(pt_rtab,"b"),  colnumb(pt_rtab,"`var'")]
 					}
 				} 
 			}  
@@ -218,5 +232,19 @@ program define plotbetas
 		** (4) TWO-WAY COMMAND *******************************************
 		** create a twoway command syntax  
 		n plottwoway, frame(`frame') `command' `nodiag' `yzero'
+		
+		** revert r() to the original estimation data that was stored in r() 
+		return scalar level = `pt_rlev'
+		return matrix table =  pt_rtab
+		
+		** display message about work in progress?
+		if "`caution'" != "" {
+			n di " "
+			n di as err "CAUTION: user-specified CI levels are currently available only for OLS models (i.e., command " as inp "regress" as err "). However, you can work around this by estimating your model with pre-specified confidence level:"
+			n di as inp " logit y x, level(99) "
+			n di as err "And then running the plotbetas command without specifying the confidence level:"
+			n di as inp " plotbetas x"
+			n di as err "If you're still unable to produce CIs, make sure that the plotbetas command follows immediately after the estimation command. If the problems persist, contact me." 
+		}
 	}
 end
