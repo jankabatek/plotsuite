@@ -155,6 +155,9 @@ program define plotbetas, rclass
 				} 
 			}  
 			mat PL = PL[2...,1...]
+			 
+			** PB: y-label for exponentiated coefficient estimates/hazard ratios (eform)
+			local eform = el(pt_rtab, rownumb(pt_rtab,"eform"),  colnumb(pt_rtab,"`var'"))
 			
 			**PB: turn the matrix into variables
 			frame `frame': svmat PL, names(plot_val`i')
@@ -198,6 +201,7 @@ program define plotbetas, rclass
 			frame `frame': cap label var UCI_val`i' "`plname' `ci'% CI, UB"
 			
 			local output "Coefficient Estimates"
+			if `eform' == 1 local output "Exponentiated Coefficient Estimates"
 			local ci_lab  "`plname' `ci'% CIs"
 			
 			** copy x-value labels for factorized vars
