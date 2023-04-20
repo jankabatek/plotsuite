@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.1  21sep2022}{...} 
+{* *! version 1.1  20apr2023}{...} 
 {vieweralsosee "plottabs" "help plottabs"}{...}
 {vieweralsosee "plotmeans" "help plotmeans"}{...}
 {vieweralsosee "plotshares" "help plotshares"}{...}
@@ -31,7 +31,7 @@
 {p2col:{cmdab:ov:er(}{it:{help varlist}})}an alternative way to specify the {it:{help varlist}}{p_end}
 {p2col:{cmdab:gr:aph(}{it:graph_type})}specify the {it:{help twoway}} {it:graph_type} for coefficient estimates: {bf:line}(default)/{bf:bar}/{bf:connected}/{bf:scatter}/etc.{p_end}
 {p2col:{cmdab:rgr:aph(}{it:rgraph_type})}specify the {it:{help twoway}} {it:rgraph_type} for confidence intervals: {bf:rarea}(default)/{bf:rbar}/{bf:rcap}/{bf:rspike}/etc.{p_end}
-{p2col:{cmdab:ci(}{bf:#},{it:ci_options})}specify the confidence level for confidence intervals:  {bf:#} = 0...100, {bf:95} = default, {bf:off} = suppress CIs{p_end}
+{p2col:{cmdab:ci(}{bf:#},{it:ci_options})}specify the confidence level for confidence intervals:  {bf:#} = 0...100, default = confidence level used in the regression output, {bf:off} = suppress CIs.{p_end}
 {p2col:}  {it:ci_options} denote {it:rgraph_type} customization options ({it:e.g.}, color and transparency){p_end}
 
 {syntab :Memory/data management}
@@ -80,6 +80,10 @@ By leveraging the data {it:{help frame}} environment, it proves extremely fast i
 {bf:Customization}: the coefficient plots can be customized by selecting the preferred {it:{help twoway}} {it:graph_type}, and adjusting it further using the {it:{help twoway_options}} and other options specific to the given {it:graph_type}. 
 The confidence-interval plots can be customized by selecting the preferred {it:{help twoway}} {it:rgraph_type}, and adjusting it further using the {it:ci_options} suboption of {bf:ci}({bf:#},{it:ci_options}). See examples below.{p_end}
 
+{pstd}
+{bf:CURRENT LIMITATIONS}: Custom confidence levels for confidence intervals are currently restricted to OLS models (command {it:{help regress}}). However, you can work around this limitation by estimating your model with pre-specified 
+confidence level (option {bf:level(#)}), and run the {bf:plotbetas} command without specifying the confidence level. See example below.{p_end}
+
 {marker examples}{...}
 {title:Examples}
 
@@ -112,6 +116,14 @@ The confidence-interval plots can be customized by selecting the preferred {it:{
 {phang2}{cmd:. sysuse nlsw88}{p_end}
 {phang2}{cmd:. reg ttl_exp i.age}{p_end}
 {phang2}{cmd:. plotbetas i.age, color(green) ci(, color(gold%35))}{p_end}
+
+    {hline}
+    Plot non-linear model coefficients with 99% CIs: 
+
+{phang2}{cmd:. clear all}{p_end}
+{phang2}{cmd:. sysuse nlsw88}{p_end}
+{phang2}{cmd:. logit collgrad i.age, level(99)}{p_end}
+{phang2}{cmd:. plotbetas i.age}{p_end}
 
     {hline}
     Plot data management:
