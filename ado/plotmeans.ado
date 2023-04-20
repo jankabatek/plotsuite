@@ -4,30 +4,30 @@ program define plotmeans
 	version 16
 	
 	** Plotmeans-specific options defined here
-	local pt_opts 		CIopt(string) 		clear 				///
-		COMmand			FRame(string) 		GLobal 				///
-		GRaph(name)  	 				    NODiag 				///
-		PLOTonly   		PLName(string) 		REPlace(integer -1) ///
-		RGRaph(name) 	OUTput(string) 		TIMes(real 1)  		///
-		XSHift(real 0)  YSHift(real 0) 		YZero
+	local pt_opts           CIopt(string) 	        clear                  ///
+		COMmand	        FRame(string) 	        GLobal                 ///
+		GRaph(name)     NODiag 	                                       ///
+		PLOTonly        PLName(string) 	        REPlace(integer -1)    ///
+		RGRaph(name)    OUTput(string) 	        TIMes(real 1)          ///
+		XSHift(real 0)  YSHift(real 0) 	        YZero
 	
 	** All native twoway options specified here...
-	local tw_opts 		 noDRAW 			NAME(string) 		///
-		SCHeme(passthru) COPYSCHeme 		noREFSCHeme 		/// 
-		FXSIZe(passthru) FYSIZe(passthru)	PLAY(string asis)	/// 
-		TItle(string)    SUBtitle(string) 	CAPtion(string)		///
-		NOTE(string)     LEGend(string)							///
-		T1title(string)  T2title(string) 	B1title(string)		///
-		B2title(string)  L1title(string) 	L2title(string)		///
-		R1title(string)  R2title(string)						///
-		XLabels(string)  YLabels(string)  	TLabels(string)		///
-		XTICks(string)   YTICks(string)   	TTICks(string)		///
-		XMLabels(string) YMLabels(string) 	TMLabels(string)	///
-		XMTicks(string)  YMTicks(string)  	TMTicks(string)		/// 
-		XTitle(string)   YTitle(string)   	TTitle(string)		///
-		XOptions(string) YOptions(string)						///
-		XSIZe(passthru)  YSIZe(passthru)						///
-		BY(string asis)  SAVing(string asis) GRAPHREGION(string)					
+	local tw_opts            noDRAW                 NAME(string)            ///
+		SCHeme(passthru) COPYSCHeme             noREFSCHeme             /// 
+		FXSIZe(passthru) FYSIZe(passthru)       PLAY(string asis)       /// 
+		TItle(string)    SUBtitle(string)       CAPtion(string)	        ///
+		NOTE(string)     LEGend(string)	                                ///
+		T1title(string)  T2title(string)        B1title(string)	        ///
+		B2title(string)  L1title(string)        L2title(string)	        ///
+		R1title(string)  R2title(string)                                ///
+		XLabels(string)  YLabels(string)        TLabels(string)	        ///
+		XTICks(string)   YTICks(string)         TTICks(string)	        ///
+		XMLabels(string) YMLabels(string)       TMLabels(string)        ///
+		XMTicks(string)  YMTicks(string)        TMTicks(string)	        /// 
+		XTitle(string)   YTitle(string)         TTitle(string)          ///
+		XOptions(string) YOptions(string)                               ///
+		XSIZe(passthru)  YSIZe(passthru)                                ///
+		BY(string asis)  SAVing(string asis)    GRAPHREGION(string)					
 		
 	syntax [varname(default=none max=1)] [if] [in] [fw aw iw pw], [over(varname)] [ `pt_opts' `tw_opts' * ] 		
  	
@@ -147,7 +147,8 @@ program define plotmeans
 					if "`noci'" =="" {
 						** get degrees of freedom & inverse t-stat for confidence level `ci'
 						local df = e(df_r)
-						local invt = invt(`df',`ci'/100)
+						local invt = invt(`df',(`ci'+(100-`ci')/2)/100)
+
 						** derive the CI for the given coefficient
 						local LC = _b[`var'] - `invt'*_se[`var']
 						local UC = _b[`var'] + `invt'*_se[`var']
