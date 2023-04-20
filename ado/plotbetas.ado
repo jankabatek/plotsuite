@@ -124,8 +124,7 @@ program define plotbetas, rclass
 				if _rc ==0 { 
 					if "`noci'" =="" {
 						** if CI level is unspecified, retrieve the CIs from the regression output
-						if `pt_rlev' == `ci' {
-							n di "default CI level" 
+						if `pt_rlev' == `ci' { 
 							local LC = el(pt_rtab, rownumb(pt_rtab,"ll"),  colnumb(pt_rtab,"`var'"))
 							local UC = el(pt_rtab, rownumb(pt_rtab,"ul"),  colnumb(pt_rtab,"`var'"))
 							local BE = el(pt_rtab, rownumb(pt_rtab,"b"),  colnumb(pt_rtab,"`var'"))
