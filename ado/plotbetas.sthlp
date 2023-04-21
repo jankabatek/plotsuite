@@ -31,7 +31,7 @@
 {p2col:{cmdab:ov:er(}{it:{help varlist}})}an alternative way to specify the {it:{help varlist}}{p_end}
 {p2col:{cmdab:gr:aph(}{it:graph_type})}specify the {it:{help twoway}} {it:graph_type} for coefficient estimates: {bf:line}(default)/{bf:bar}/{bf:connected}/{bf:scatter}/etc.{p_end}
 {p2col:{cmdab:rgr:aph(}{it:rgraph_type})}specify the {it:{help twoway}} {it:rgraph_type} for confidence intervals: {bf:rarea}(default)/{bf:rbar}/{bf:rcap}/{bf:rspike}/etc.{p_end}
-{p2col:{cmdab:ci(}{bf:#},{it:ci_options})}specify the confidence level for confidence intervals:  {bf:#} = 0...100, {bf:off} = suppress CIs, default value is set to be the confidence level used in the regression output.{p_end}
+{p2col:{cmdab:ci(}{bf:#},{it:ci_options})}specify the confidence level for confidence intervals:  {bf:#} = 0...100, {bf:off} = suppress CIs. By default, {bf:#} is the confidence level used in the regression output.{p_end}
 {p2col:}  {it:ci_options} denote {it:rgraph_type} customization options ({it:e.g.}, color and transparency){p_end}
 
 {syntab :Memory/data management}
