@@ -1,4 +1,4 @@
-*! version 1.3 20Apr2023 
+*! version 1.4 23Oct2023 
 capture program drop plotbetas 
 program define plotbetas, rclass
 	version 16
@@ -149,7 +149,7 @@ program define plotbetas, rclass
 						
 					}
 					else { 
-						mat PL = [PL \ `ii' , el(pt_rtab, rownumb(pt_rtab,"b"),  colnumb(pt_rtab,"`var'")]
+						mat PL = [PL \ `ii' , el(pt_rtab, rownumb(pt_rtab,"b"),  colnumb(pt_rtab,"`var'"))]
 					}
 				} 
 			}  
